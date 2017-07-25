@@ -7,6 +7,7 @@ public class Brick : MonoBehaviour {
 	public AudioClip crack;
 	public Sprite[] hitSprites;
 	public float audioVolume = 0.5f;
+	public GameObject smoke;
 
 	private LevelManager levelManager;
 	private int timesHit;
@@ -45,11 +46,20 @@ public class Brick : MonoBehaviour {
 		
 		if (timesHit >= maxHits) {
 			breakableCount--;
+			puffSmoke();
 			levelManager.BrickDestroyed();
 			Destroy(gameObject);
 		} else {
 			LoadSprites();
 		}
+	}
+	
+	void puffSmoke() {
+		// on peut aussi écrire : 
+		// GameObject smokePuff = Instantiate  (smoke, gameObject.transform.position, Quaternion.identity) as GameObject
+		// point syntaxe C#
+		GameObject smokePuff = (GameObject) Instantiate  (smoke, gameObject.transform.position, Quaternion.identity);
+		smokePuff.particleSystem.startColor = gameObject.GetComponent<SpriteRenderer>().color;
 	}
 	
 	void LoadSprites() {
